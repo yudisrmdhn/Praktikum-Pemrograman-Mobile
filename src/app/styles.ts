@@ -3,159 +3,245 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F5F0",
-    padding: 20,
+    backgroundColor: "#F7F4EF",
   },
 
   header: {
-    marginTop: 40,
-    marginBottom: 25,
+    paddingHorizontal: 20,
+    paddingTop: 30,
+    paddingBottom: 20,
   },
 
   title: {
-    fontSize: 30,
+    fontSize: 32,
     fontWeight: "bold",
-    color: "#4A3B32",
+    color: "#3F342E",
   },
 
   subtitle: {
     fontSize: 16,
-    color: "#7A6A60",
+    color: "#7A6F68",
     marginTop: 5,
   },
 
   studentCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 15,
+    backgroundColor: "white",
+    marginHorizontal: 20,
     padding: 18,
-    marginBottom: 20,
+    borderRadius: 15,
+    marginBottom: 22,
   },
 
   label: {
     fontSize: 13,
     color: "#8A7B72",
-    marginBottom: 4,
+    marginBottom: 8,
   },
 
   profileName: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#3D3029",
+    color: "#3F342E",
+    marginBottom: 5,
   },
 
   nim: {
     fontSize: 14,
-    color: "#75665D",
+    color: "#7A6F68",
     marginTop: 4,
   },
 
-  courseCard: {
-    backgroundColor: "#FFFFFF",
+  section: {
+    marginHorizontal: 20,
+    marginBottom: 22,
+  },
+
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#171717",
+    marginBottom: 12,
+  },
+
+  summaryContainer: {
+    flexDirection: "row",
+    gap: 10,
+  },
+
+  summaryCard: {
+    flex: 1,
+    backgroundColor: "white",
     borderRadius: 15,
+    padding: 22,
+    alignItems: "center",
+  },
+
+  summaryNumber: {
+    fontSize: 26,
+    fontWeight: "bold",
+    color: "#3F7D58",
+  },
+
+  summaryLabel: {
+    fontSize: 14,
+    color: "#7A6F68",
+    marginTop: 5,
+  },
+
+  percentageCard: {
+    backgroundColor: "white",
+    borderRadius: 15,
+    padding: 22,
+    alignItems: "center",
+    marginTop: 10,
+  },
+
+  percentageLabel: {
+    fontSize: 14,
+    color: "#7A6F68",
+  },
+
+  percentageNumber: {
+    fontSize: 32,
+    fontWeight: "bold",
+    color: "#3F7D58",
+    marginTop: 5,
+  },
+
+  courseCard: {
+    backgroundColor: "white",
+    marginHorizontal: 20,
     padding: 18,
+    borderRadius: 15,
+    marginBottom: 10,
   },
 
   courseTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#4A3B32",
+    color: "#4A403B",
+    marginBottom: 20,
+  },
+
+  selectLabel: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#7A6F68",
+    marginBottom: 10,
+    marginTop: 5,
+  },
+
+  dayContainer: {
+    flexDirection: "row",
+    gap: 8,
     marginBottom: 15,
   },
 
-  studentRow: {
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#E8E0DA",
+  dayButton: {
+    flex: 1,
+    paddingVertical: 11,
+    borderRadius: 9,
+    borderWidth: 1,
+    borderColor: "#D8D2CC",
+    alignItems: "center",
   },
 
-  studentRowName: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#4A3B32",
+  selectedDayButton: {
+    backgroundColor: "#3F7D58",
+    borderColor: "#3F7D58",
+  },
+
+  dayButtonText: {
+    fontSize: 13,
+    color: "#4A403B",
+  },
+
+  selectedDayButtonText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+
+  courseOption: {
+    borderWidth: 1,
+    borderColor: "#D8D2CC",
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 8,
+  },
+
+  selectedCourse: {
+    backgroundColor: "#3F7D58",
+    borderColor: "#3F7D58",
+  },
+
+  courseOptionText: {
+    fontSize: 14,
+    color: "#4A403B",
+    textAlign: "center",
+  },
+
+  selectedCourseText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+
+  presenceBox: {
+    marginTop: 10,
+    paddingTop: 15,
+    borderTopWidth: 1,
+    borderTopColor: "#E8DED7",
+  },
+
+  selectedSubject: {
+    fontSize: 17,
+    fontWeight: "bold",
+    color: "#171717",
   },
 
   status: {
     fontSize: 13,
-    marginTop: 4,
+    marginTop: 7,
   },
 
-  section: {
-  marginBottom: 18,
-},
+  attendanceButton: {
+    height: 48,
+    backgroundColor: "#3F7D58",
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 18,
+  },
 
-sectionTitle: {
-  fontSize: 20,
-  fontWeight: "bold",
-  marginBottom: 12,
-},
+  attendanceButtonText: {
+    color: "white",
+    fontSize: 14,
+    fontWeight: "bold",
+  },
 
-summaryContainer: {
-  flexDirection: "row",
-  gap: 10,
-},
+  studentRow: {
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E8DED7",
+  },
 
-summaryCard: {
-  flex: 1,
-  backgroundColor: "#FFFFFF",
-  borderRadius: 12,
-  padding: 18,
-  alignItems: "center",
-},
+  studentRowName: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#4A403B",
+  },
 
-summaryNumber: {
-  fontSize: 26,
-  fontWeight: "bold",
-  color: "#3F7D58",
-},
+  historyRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E8DED7",
+  },
 
-summaryLabel: {
-  marginTop: 5,
-  color: "#777777",
-},
-
-percentageCard: {
-  marginTop: 10,
-  backgroundColor: "#FFFFFF",
-  borderRadius: 12,
-  padding: 18,
-  alignItems: "center",
-},
-
-percentageLabel: {
-  fontSize: 15,
-  color: "#777777",
-},
-
-todaySubject: {
-  fontSize: 18,
-  fontWeight: "bold",
-  marginTop: 10,
-},
-
-attendanceButton: {
-  backgroundColor: "#3F7D58",
-  borderRadius: 10,
-  paddingVertical: 14,
-  alignItems: "center",
-  marginTop: 18,
-},
-
-attendanceButtonText: {
-  color: "#FFFFFF",
-  fontWeight: "bold",
-},
-
-historyRow: {
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "center",
-  paddingVertical: 15,
-  borderBottomWidth: 1,
-  borderBottomColor: "#E5E5E5",
-},
-
-historySubject: {
-  fontSize: 16,
-  fontWeight: "bold",
-},
+  historySubject: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#171717",
+  },
 });
