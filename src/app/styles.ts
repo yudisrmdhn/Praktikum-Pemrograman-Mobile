@@ -78,4 +78,84 @@ export const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: 4,
   },
+
+  section: {
+  marginBottom: 18,
+},
+
+sectionTitle: {
+  fontSize: 20,
+  fontWeight: "bold",
+  marginBottom: 12,
+},
+
+summaryContainer: {
+  flexDirection: "row",
+  gap: 10,
+},
+
+summaryCard: {
+  flex: 1,
+  backgroundColor: "#FFFFFF",
+  borderRadius: 12,
+  padding: 18,
+  alignItems: "center",
+},
+
+summaryNumber: {
+  fontSize: 26,
+  fontWeight: "bold",
+  color: "#3F7D58",
+},
+
+summaryLabel: {
+  marginTop: 5,
+  color: "#777777",
+},
+
+percentageCard: {
+  marginTop: 10,
+  backgroundColor: "#FFFFFF",
+  borderRadius: 12,
+  padding: 18,
+  alignItems: "center",
+},
+
+percentageLabel: {
+  fontSize: 15,
+  color: "#777777",
+},
+
+todaySubject: {
+  fontSize: 18,
+  fontWeight: "bold",
+  marginTop: 10,
+},
+
+attendanceButton: {
+  backgroundColor: "#3F7D58",
+  borderRadius: 10,
+  paddingVertical: 14,
+  alignItems: "center",
+  marginTop: 18,
+},
+
+attendanceButtonText: {
+  color: "#FFFFFF",
+  fontWeight: "bold",
+},
+
+historyRow: {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  paddingVertical: 15,
+  borderBottomWidth: 1,
+  borderBottomColor: "#E5E5E5",
+},
+
+historySubject: {
+  fontSize: 16,
+  fontWeight: "bold",
+},
 });
