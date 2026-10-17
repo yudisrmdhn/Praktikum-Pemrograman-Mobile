@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import {
   ScrollView,
@@ -5,6 +6,7 @@ import {
   View,
   Pressable,
 } from "react-native";
+import { useRouter } from "expo-router";
 import { styles } from "./styles";
 
 interface Student {
@@ -149,6 +151,8 @@ function getAttendancePercentage(): number {
 }
 
 export default function Index() {
+  const router = useRouter();
+
   const [selectedDay, setSelectedDay] =
     useState("Senin");
 
@@ -275,9 +279,7 @@ export default function Index() {
                 selectedDay === day &&
                   styles.selectedDayButton,
               ]}
-              onPress={() =>
-                handleDaySelect(day)
-              }
+              onPress={() => handleDaySelect(day)}
             >
               <Text
                 style={[
@@ -305,9 +307,7 @@ export default function Index() {
                 styles.selectedCourse,
             ]}
             onPress={() =>
-              handleCourseSelect(
-                course.name
-              )
+              handleCourseSelect(course.name)
             }
           >
             <Text
@@ -343,18 +343,14 @@ export default function Index() {
               ]}
             >
               Status:{" "}
-              {getAttendanceStatus(
-                isPresent
-              )}
+              {getAttendanceStatus(isPresent)}
             </Text>
 
             <Pressable
               style={styles.attendanceButton}
               onPress={handleAttendance}
             >
-              <Text
-                style={styles.attendanceButtonText}
-              >
+              <Text style={styles.attendanceButtonText}>
                 {isPresent
                   ? "✓ SUDAH PRESENSI"
                   : "PRESENSI SEKARANG"}
@@ -394,9 +390,7 @@ export default function Index() {
               ]}
             >
               Status:{" "}
-              {getAttendanceStatus(
-                student.isPresent
-              )}
+              {getAttendanceStatus(student.isPresent)}
             </Text>
           </View>
         ))}
@@ -408,39 +402,62 @@ export default function Index() {
           Riwayat Presensi
         </Text>
 
-        {attendanceData.map(
-          (attendance) => (
-            <View
-              key={attendance.id}
-              style={styles.historyRow}
-            >
-              <View>
-                <Text
-                  style={styles.historySubject}
-                >
-                  {attendance.subject}
-                </Text>
+        {attendanceData.map((attendance) => (
+          <View
+            key={attendance.id}
+            style={styles.historyRow}
+          >
+            <View>
+              <Text style={styles.historySubject}>
+                {attendance.subject}
+              </Text>
 
-                <Text style={styles.nim}>
-                  {attendance.meeting}
-                </Text>
-              </View>
-
-              <Text
-                style={{
-                  color:
-                    attendance.status ===
-                    "Hadir"
-                      ? "#3F7D58"
-                      : "#B35C44",
-                  fontWeight: "bold",
-                }}
-              >
-                {attendance.status}
+              <Text style={styles.nim}>
+                {attendance.meeting}
               </Text>
             </View>
-          )
-        )}
+
+            <Text
+              style={{
+                color:
+                  attendance.status === "Hadir"
+                    ? "#3F7D58"
+                    : "#B35C44",
+                fontWeight: "bold",
+              }}
+            >
+              {attendance.status}
+            </Text>
+          </View>
+        ))}
+      </View>
+
+      {/* NAVIGASI APLIKASI */}
+      <View style={styles.courseCard}>
+        <Text style={styles.courseTitle}>
+          Navigasi Aplikasi
+        </Text>
+
+        <Pressable
+          style={styles.attendanceButton}
+          onPress={() => router.push("/riwayat")}
+        >
+          <Text style={styles.attendanceButtonText}>
+            LIHAT HALAMAN RIWAYAT
+          </Text>
+        </Pressable>
+
+        <Pressable
+          style={[
+            styles.attendanceButton,
+            { backgroundColor: "#80634F" },
+          ]}
+          onPress={() => router.replace("/profil")}
+        >
+          <Text style={styles.attendanceButtonText}>
+            BUKA HALAMAN PROFIL
+          </Text>
+        </Pressable>
       </View>
     </ScrollView>
   );
