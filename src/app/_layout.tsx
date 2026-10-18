@@ -1,21 +1,25 @@
-
 import { Stack } from "expo-router";
 
 export default function RootLayout() {
   return (
-    <Stack>
+    <Stack initialRouteName="index">
       <Stack.Screen
         name="index"
         options={{
-          title: "AttendUMM",
           headerShown: false,
         }}
       />
 
       <Stack.Screen
-        name="riwayat"
+        name="login"
         options={{
-          title: "Riwayat Presensi",
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="dashboard"
+        options={{
           headerShown: false,
         }}
       />
@@ -23,7 +27,13 @@ export default function RootLayout() {
       <Stack.Screen
         name="profil"
         options={{
-          title: "Profil Mahasiswa",
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="riwayat"
+        options={{
           headerShown: false,
         }}
       />
