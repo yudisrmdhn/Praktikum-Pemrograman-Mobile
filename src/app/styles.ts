@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F7F4EF",
+    backgroundColor: "#FFF5F5",
   },
 
   header: {
@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: "bold",
-    color: "#3F342E",
+    color: "#C62828",
   },
 
   subtitle: {
@@ -41,7 +41,7 @@ export const styles = StyleSheet.create({
   profileName: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#3F342E",
+    color: "#7F1D1D",
     marginBottom: 5,
   },
 
@@ -142,7 +142,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 11,
     borderRadius: 9,
     borderWidth: 1,
-    borderColor: "#D8D2CC",
+    borderColor: "#F0CACA",
     alignItems: "center",
   },
 
@@ -189,7 +189,7 @@ export const styles = StyleSheet.create({
     marginTop: 10,
     paddingTop: 15,
     borderTopWidth: 1,
-    borderTopColor: "#E8DED7",
+    borderTopColor: "#F5DEDE",
   },
 
   selectedSubject: {
