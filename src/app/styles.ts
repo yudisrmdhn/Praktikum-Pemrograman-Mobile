@@ -72,7 +72,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
     borderRadius: 15,
-    padding: 22,
+    padding: 18,
     alignItems: "center",
   },
 
@@ -113,14 +113,15 @@ export const styles = StyleSheet.create({
     marginHorizontal: 20,
     padding: 18,
     borderRadius: 15,
-    marginBottom: 10,
+    marginBottom: 12,
   },
 
   courseTitle: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#4A403B",
-    marginBottom: 20,
+    marginBottom: 0,
+    flex: 1,
   },
 
   selectLabel: {
@@ -128,7 +129,7 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#7A6F68",
     marginBottom: 10,
-    marginTop: 5,
+    marginTop: 15,
   },
 
   dayContainer: {
@@ -198,9 +199,21 @@ export const styles = StyleSheet.create({
     color: "#171717",
   },
 
-  status: {
-    fontSize: 13,
-    marginTop: 7,
+  presenceStatusRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 14,
+  },
+
+  statusLabel: {
+    fontSize: 14,
+    color: "#7A6F68",
+  },
+
+  presenceStatus: {
+    fontSize: 14,
+    fontWeight: "bold",
   },
 
   attendanceButton: {
@@ -212,24 +225,139 @@ export const styles = StyleSheet.create({
     marginTop: 18,
   },
 
+  disabledAttendanceButton: {
+    backgroundColor: "#8BAE96",
+  },
+
   attendanceButtonText: {
     color: "white",
     fontSize: 14,
     fontWeight: "bold",
   },
 
-  studentRow: {
+  profileNavigationButton: {
+    backgroundColor: "#B71C1C",
+  },
+
+  // DROPDOWN
+  dropdownHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 4,
+  },
+
+  dropdownIcon: {
+    fontSize: 15,
+    color: "#C62828",
+    fontWeight: "bold",
+    marginLeft: 10,
+  },
+
+  // TABEL MAHASISWA UMM
+  tableContainer: {
+    marginTop: 18,
+  },
+
+  tableHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFF5F5",
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+  },
+
+  tableHeaderText: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: "#7F1D1D",
+  },
+
+  nameColumn: {
+    flex: 1.35,
+    paddingRight: 6,
+  },
+
+  nimColumn: {
+    flex: 1,
+    paddingRight: 5,
+  },
+
+  statusColumn: {
+    flex: 0.7,
+    alignItems: "flex-end",
+  },
+
+  tableRow: {
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 14,
+    paddingHorizontal: 8,
     borderBottomWidth: 1,
     borderBottomColor: "#E8DED7",
   },
 
-  studentRowName: {
-    fontSize: 15,
+  tableName: {
+    fontSize: 12,
     fontWeight: "bold",
     color: "#4A403B",
   },
 
+  tableNim: {
+    fontSize: 11,
+    color: "#7A6F68",
+  },
+
+  statusCell: {
+    justifyContent: "center",
+  },
+
+  statusBadge: {
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+
+  // TABEL EXTERNAL API
+  apiTableHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFF5F5",
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+  },
+
+  apiNameColumn: {
+    flex: 1,
+    paddingRight: 8,
+  },
+
+  apiEmailColumn: {
+    flex: 1.2,
+  },
+
+  apiTableRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 14,
+    paddingHorizontal: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E8DED7",
+  },
+
+  apiName: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: "#4A403B",
+  },
+
+  apiEmail: {
+    fontSize: 11,
+    color: "#7A6F68",
+  },
+
+  // RIWAYAT PRESENSI
   historyRow: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -239,9 +367,19 @@ export const styles = StyleSheet.create({
     borderBottomColor: "#E8DED7",
   },
 
+  historyInfo: {
+    flex: 1,
+    paddingRight: 10,
+  },
+
   historySubject: {
     fontSize: 15,
     fontWeight: "bold",
     color: "#171717",
+  },
+
+  historyStatus: {
+    fontSize: 13,
+    fontWeight: "bold",
   },
 });

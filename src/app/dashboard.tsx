@@ -1,19 +1,22 @@
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
+import { getStudents, type Student as ApiStudent } from "../services/api";
 import { styles } from "./styles";
+
+type AttendanceStatus = "Hadir" | "Izin" | "Alpha";
 
 interface Student {
   name: string;
   nim: string;
-  isPresent: boolean;
+  status: AttendanceStatus;
 }
 
 interface Attendance {
   id: number;
   subject: string;
   meeting: string;
-  status: "Hadir" | "Belum Presensi";
+  status: AttendanceStatus;
 }
 
 interface Course {
@@ -26,17 +29,17 @@ const students: Student[] = [
   {
     name: "Salzabilla Aurelia Maheswari",
     nim: "202410370110283",
-    isPresent: true,
+    status: "Hadir",
   },
   {
     name: "Putri Nurnikmatus Suharnani",
     nim: "202410370110292",
-    isPresent: true,
+    status: "Hadir",
   },
   {
     name: "Gagah Yudhistira Ramadhan",
     nim: "202410370110323",
-    isPresent: true,
+    status: "Izin",
   },
 ];
 
@@ -76,19 +79,29 @@ const courses: Course[] = [
 
 const days = ["Senin", "Selasa", "Rabu", "Kamis"];
 
-function getAttendanceStatus(isPresent: boolean): string {
-  return isPresent ? "Hadir" : "Belum Presensi";
+function getTotalPresent() {
+  return students.filter((student) => student.status === "Hadir").length;
 }
 
-function getTotalPresent(): number {
-  return students.filter((student) => student.isPresent).length;
+function getTotalStatus(status: AttendanceStatus) {
+  return students.filter((student) => student.status === status).length;
 }
 
-function getAttendancePercentage(): number {
-  const total = students.length;
-  const present = getTotalPresent();
+function getAttendancePercentage() {
+  return students.length === 0
+    ? 0
+    : Math.round((getTotalPresent() / students.length) * 100);
+}
 
-  return total === 0 ? 0 : Math.round((present / total) * 100);
+function getStatusColor(status: AttendanceStatus) {
+  switch (status) {
+    case "Hadir":
+      return "#3F7D58";
+    case "Izin":
+      return "#C28A32";
+    case "Alpha":
+      return "#B35C44";
+  }
 }
 
 export default function Index() {
@@ -98,9 +111,25 @@ export default function Index() {
   const [selectedCourse, setSelectedCourse] = useState("");
   const [isPresent, setIsPresent] = useState(false);
 
-  // useEffect berjalan saat dashboard pertama kali dibuka.
+  const [showStudents, setShowStudents] = useState(false);
+  const [showApiStudents, setShowApiStudents] = useState(false);
+
+  const [apiStudents, setApiStudents] = useState<ApiStudent[]>([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    console.log("Dashboard AttendUMM berhasil dibuka");
+    async function loadStudents() {
+      try {
+        const data = await getStudents();
+        setApiStudents(data);
+      } catch (error) {
+        console.log("Gagal mengambil data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadStudents();
   }, []);
 
   const coursesByDay = courses.filter((course) => course.day === selectedDay);
@@ -149,10 +178,13 @@ export default function Index() {
           </View>
 
           <View style={styles.summaryCard}>
-            <Text style={styles.summaryNumber}>
-              {students.length - getTotalPresent()}
-            </Text>
-            <Text style={styles.summaryLabel}>Belum</Text>
+            <Text style={styles.summaryNumber}>{getTotalStatus("Izin")}</Text>
+            <Text style={styles.summaryLabel}>Izin</Text>
+          </View>
+
+          <View style={styles.summaryCard}>
+            <Text style={styles.summaryNumber}>{getTotalStatus("Alpha")}</Text>
+            <Text style={styles.summaryLabel}>Alpha</Text>
           </View>
         </View>
 
@@ -164,9 +196,10 @@ export default function Index() {
         </View>
       </View>
 
-      {/* PILIH HARI DAN MATA KULIAH */}
+      {/* JADWAL DAN PRESENSI */}
       <View style={styles.courseCard}>
         <Text style={styles.courseTitle}>Pilih Jadwal Presensi</Text>
+
         <Text style={styles.selectLabel}>Pilih Hari</Text>
 
         <View style={styles.dayContainer}>
@@ -220,19 +253,28 @@ export default function Index() {
         {selectedCourse !== "" && (
           <View style={styles.presenceBox}>
             <Text style={styles.selectedSubject}>{selectedCourse}</Text>
+
             <Text style={styles.nim}>Pertemuan 1</Text>
 
-            <Text
-              style={[
-                styles.status,
-                { color: isPresent ? "#3F7D58" : "#B35C44" },
-              ]}
-            >
-              Status: {getAttendanceStatus(isPresent)}
-            </Text>
+            <View style={styles.presenceStatusRow}>
+              <Text style={styles.statusLabel}>Status Presensi</Text>
+              <Text
+                style={[
+                  styles.presenceStatus,
+                  {
+                    color: isPresent ? "#3F7D58" : "#B35C44",
+                  },
+                ]}
+              >
+                {isPresent ? "Hadir" : "Belum Presensi"}
+              </Text>
+            </View>
 
             <Pressable
-              style={styles.attendanceButton}
+              style={[
+                styles.attendanceButton,
+                isPresent && styles.disabledAttendanceButton,
+              ]}
               onPress={handleAttendance}
               disabled={isPresent}
             >
@@ -244,27 +286,114 @@ export default function Index() {
         )}
       </View>
 
-      {/* DAFTAR MAHASISWA */}
+      {/* DAFTAR MAHASISWA UMM */}
       <View style={styles.courseCard}>
-        <Text style={styles.courseTitle}>Daftar Mahasiswa</Text>
+        <Pressable
+          style={styles.dropdownHeader}
+          onPress={() => setShowStudents(!showStudents)}
+        >
+          <Text style={styles.courseTitle}>Daftar Mahasiswa UMM</Text>
 
-        {students.map((student) => (
-          <View key={student.nim} style={styles.studentRow}>
-            <Text style={styles.studentRowName}>{student.name}</Text>
-            <Text style={styles.nim}>{student.nim}</Text>
+          <Text style={styles.dropdownIcon}>{showStudents ? "▲" : "▼"}</Text>
+        </Pressable>
 
-            <Text
-              style={[
-                styles.status,
-                {
-                  color: student.isPresent ? "#3F7D58" : "#B35C44",
-                },
-              ]}
-            >
-              Status: {getAttendanceStatus(student.isPresent)}
-            </Text>
+        {showStudents && (
+          <View style={styles.tableContainer}>
+            <View style={styles.tableHeader}>
+              <Text style={[styles.tableHeaderText, styles.nameColumn]}>
+                Nama Mahasiswa
+              </Text>
+              <Text style={[styles.tableHeaderText, styles.nimColumn]}>
+                NIM
+              </Text>
+              <Text style={[styles.tableHeaderText, styles.statusColumn]}>
+                Status
+              </Text>
+            </View>
+
+            {students.map((student) => (
+              <View key={student.nim} style={styles.tableRow}>
+                <Text
+                  style={[styles.tableName, styles.nameColumn]}
+                  numberOfLines={2}
+                >
+                  {student.name}
+                </Text>
+
+                <Text
+                  style={[styles.tableNim, styles.nimColumn]}
+                  numberOfLines={2}
+                >
+                  {student.nim}
+                </Text>
+
+                <View style={[styles.statusColumn, styles.statusCell]}>
+                  <Text
+                    style={[
+                      styles.statusBadge,
+                      { color: getStatusColor(student.status) },
+                    ]}
+                  >
+                    {student.status}
+                  </Text>
+                </View>
+              </View>
+            ))}
           </View>
-        ))}
+        )}
+      </View>
+
+      {/* DATA MAHASISWA EXTERNAL API */}
+      <View style={styles.courseCard}>
+        <Pressable
+          style={styles.dropdownHeader}
+          onPress={() => setShowApiStudents(!showApiStudents)}
+        >
+          <Text style={styles.courseTitle}>
+            Data Mahasiswa dari External API
+          </Text>
+
+          <Text style={styles.dropdownIcon}>{showApiStudents ? "▲" : "▼"}</Text>
+        </Pressable>
+
+        {showApiStudents && (
+          <View style={styles.tableContainer}>
+            <View style={styles.apiTableHeader}>
+              <Text style={[styles.tableHeaderText, styles.apiNameColumn]}>
+                Nama
+              </Text>
+              <Text style={[styles.tableHeaderText, styles.apiEmailColumn]}>
+                Email
+              </Text>
+            </View>
+
+            {loading ? (
+              <Text style={styles.nim}>Memuat data...</Text>
+            ) : apiStudents.length === 0 ? (
+              <Text style={styles.nim}>
+                Data gagal dimuat. Periksa koneksi internet.
+              </Text>
+            ) : (
+              apiStudents.map((student) => (
+                <View key={student.id} style={styles.apiTableRow}>
+                  <Text
+                    style={[styles.apiName, styles.apiNameColumn]}
+                    numberOfLines={2}
+                  >
+                    {student.name}
+                  </Text>
+
+                  <Text
+                    style={[styles.apiEmail, styles.apiEmailColumn]}
+                    numberOfLines={2}
+                  >
+                    {student.email}
+                  </Text>
+                </View>
+              ))
+            )}
+          </View>
+        )}
       </View>
 
       {/* RIWAYAT PRESENSI */}
@@ -273,16 +402,16 @@ export default function Index() {
 
         {attendanceData.map((attendance) => (
           <View key={attendance.id} style={styles.historyRow}>
-            <View>
+            <View style={styles.historyInfo}>
               <Text style={styles.historySubject}>{attendance.subject}</Text>
               <Text style={styles.nim}>{attendance.meeting}</Text>
             </View>
 
             <Text
-              style={{
-                color: attendance.status === "Hadir" ? "#3F7D58" : "#B35C44",
-                fontWeight: "bold",
-              }}
+              style={[
+                styles.historyStatus,
+                { color: getStatusColor(attendance.status) },
+              ]}
             >
               {attendance.status}
             </Text>
@@ -302,7 +431,7 @@ export default function Index() {
         </Pressable>
 
         <Pressable
-          style={[styles.attendanceButton, { backgroundColor: "#B71C1C" }]}
+          style={[styles.attendanceButton, styles.profileNavigationButton]}
           onPress={() => router.replace("/profil" as any)}
         >
           <Text style={styles.attendanceButtonText}>BUKA HALAMAN PROFIL</Text>

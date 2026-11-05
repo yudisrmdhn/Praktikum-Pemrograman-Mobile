@@ -6,7 +6,7 @@ export default function Profil() {
   const router = useRouter();
 
   function handleBack() {
-    router.push("/");
+    router.push("/dashboard");
   }
 
   return (
