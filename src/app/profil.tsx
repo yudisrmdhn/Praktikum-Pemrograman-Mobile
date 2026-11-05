@@ -1,18 +1,19 @@
 
-import {
-  ScrollView,
-  Text,
-  View,
-  Pressable,
-} from "react-native";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { styles } from "./styles";
 
 export default function Profil() {
   const router = useRouter();
 
+  const { nama, nim, prodi } = useLocalSearchParams<{
+    nama: string;
+    nim: string;
+    prodi: string;
+  }>();
+
   function handleBack() {
-    router.push("/");
+    router.back();
   }
 
   return (
@@ -22,10 +23,7 @@ export default function Profil() {
     >
       {/* HEADER */}
       <View style={styles.header}>
-        <Text style={styles.title}>
-          Profil Mahasiswa
-        </Text>
-
+        <Text style={styles.title}>Profil Mahasiswa</Text>
         <Text style={styles.subtitle}>
           Informasi mahasiswa AttendUMM
         </Text>
@@ -33,20 +31,18 @@ export default function Profil() {
 
       {/* INFORMASI MAHASISWA */}
       <View style={styles.studentCard}>
-        <Text style={styles.label}>
-          Nama Mahasiswa
-        </Text>
+        <Text style={styles.label}>Nama Mahasiswa</Text>
 
         <Text style={styles.profileName}>
-          Gagah Yudhistira Ramadhan
+          {nama || "Nama Mahasiswa"}
         </Text>
 
         <Text style={styles.nim}>
-          NIM: 202410370110323
+          NIM: {nim || "-"}
         </Text>
 
         <Text style={styles.nim}>
-          Program Studi: Informatika
+          Program Studi: {prodi || "-"}
         </Text>
 
         <Text style={styles.nim}>
@@ -61,10 +57,9 @@ export default function Profil() {
         </Text>
 
         <Text style={styles.nim}>
-          AttendUMM merupakan aplikasi presensi
-          mahasiswa untuk melihat jadwal,
-          melakukan presensi, dan memantau
-          riwayat kehadiran.
+          AttendUMM merupakan aplikasi presensi mahasiswa
+          untuk melihat jadwal, melakukan presensi, dan
+          memantau riwayat kehadiran.
         </Text>
       </View>
 
