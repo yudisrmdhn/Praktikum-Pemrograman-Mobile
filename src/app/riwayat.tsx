@@ -1,5 +1,6 @@
 import { ScrollView, Text, View, Pressable } from "react-native";
 import { useRouter } from "expo-router";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { styles } from "./styles";
 
 export default function Riwayat() {
