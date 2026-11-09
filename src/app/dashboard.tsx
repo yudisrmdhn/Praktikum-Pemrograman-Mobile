@@ -1,16 +1,7 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import {
-  Alert,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
-import {
-  getStudents,
-  type Student as ApiStudent,
-} from "../services/api";
+import { Alert, Pressable, ScrollView, Text, View } from "react-native";
+import { getStudents, type Student as ApiStudent } from "../services/api";
 import { styles } from "./styles";
 
 type AttendanceStatus = "Hadir" | "Izin" | "Alpha";
@@ -89,23 +80,17 @@ const courses: Course[] = [
 const days = ["Senin", "Selasa", "Rabu", "Kamis"];
 
 function getTotalPresent() {
-  return students.filter(
-    (student) => student.status === "Hadir"
-  ).length;
+  return students.filter((student) => student.status === "Hadir").length;
 }
 
 function getTotalStatus(status: AttendanceStatus) {
-  return students.filter(
-    (student) => student.status === status
-  ).length;
+  return students.filter((student) => student.status === status).length;
 }
 
 function getAttendancePercentage() {
   return students.length === 0
     ? 0
-    : Math.round(
-        (getTotalPresent() / students.length) * 100
-      );
+    : Math.round((getTotalPresent() / students.length) * 100);
 }
 
 function getStatusColor(status: AttendanceStatus) {
@@ -117,6 +102,24 @@ function getStatusColor(status: AttendanceStatus) {
     case "Alpha":
       return "#B35C44";
   }
+}
+
+// =====================================
+// PROMISE: RESOLVE DAN REJECT
+// =====================================
+
+function processAttendance(courseName: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (courseName.trim() === "") {
+        // REJECT: proses presensi gagal
+        reject(new Error("Silakan pilih mata kuliah terlebih dahulu!"));
+      } else {
+        // RESOLVE: proses presensi berhasil
+        resolve(`Presensi ${courseName} berhasil dilakukan.`);
+      }
+    }, 1000);
+  });
 }
 
 export default function Index() {
@@ -156,9 +159,7 @@ export default function Index() {
     loadStudents();
   }, []);
 
-  const coursesByDay = courses.filter(
-    (course) => course.day === selectedDay
-  );
+  const coursesByDay = courses.filter((course) => course.day === selectedDay);
 
   function handleDaySelect(day: string) {
     setSelectedDay(day);
@@ -229,68 +230,47 @@ export default function Index() {
   }
 
   return (
-    <ScrollView
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-    >
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* HEADER */}
       <View style={styles.header}>
         <Text style={styles.title}>AttendUMM</Text>
-        <Text style={styles.subtitle}>
-          Aplikasi Presensi Mahasiswa UMM
-        </Text>
+        <Text style={styles.subtitle}>Aplikasi Presensi Mahasiswa UMM</Text>
       </View>
 
       {/* PROFIL MAHASISWA */}
       <View style={styles.studentCard}>
         <Text style={styles.label}>Mahasiswa</Text>
 
-        <Text style={styles.profileName}>
-          {nama || "Nama Mahasiswa"}
-        </Text>
+        <Text style={styles.profileName}>{nama || "Nama Mahasiswa"}</Text>
 
-        <Text style={styles.nim}>
-          NIM: {nim || "-"}
-        </Text>
+        <Text style={styles.nim}>NIM: {nim || "-"}</Text>
 
-        <Text style={styles.nim}>
-          Program Studi: {prodi || "-"}
-        </Text>
+        <Text style={styles.nim}>Program Studi: {prodi || "-"}</Text>
       </View>
 
       {/* RINGKASAN PRESENSI */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>
-          Ringkasan Presensi
-        </Text>
+        <Text style={styles.sectionTitle}>Ringkasan Presensi</Text>
 
         <View style={styles.summaryContainer}>
           <View style={styles.summaryCard}>
-            <Text style={styles.summaryNumber}>
-              {getTotalPresent()}
-            </Text>
+            <Text style={styles.summaryNumber}>{getTotalPresent()}</Text>
             <Text style={styles.summaryLabel}>Hadir</Text>
           </View>
 
           <View style={styles.summaryCard}>
-            <Text style={styles.summaryNumber}>
-              {getTotalStatus("Izin")}
-            </Text>
+            <Text style={styles.summaryNumber}>{getTotalStatus("Izin")}</Text>
             <Text style={styles.summaryLabel}>Izin</Text>
           </View>
 
           <View style={styles.summaryCard}>
-            <Text style={styles.summaryNumber}>
-              {getTotalStatus("Alpha")}
-            </Text>
+            <Text style={styles.summaryNumber}>{getTotalStatus("Alpha")}</Text>
             <Text style={styles.summaryLabel}>Alpha</Text>
           </View>
         </View>
 
         <View style={styles.percentageCard}>
-          <Text style={styles.percentageLabel}>
-            Persentase Kehadiran
-          </Text>
+          <Text style={styles.percentageLabel}>Persentase Kehadiran</Text>
           <Text style={styles.percentageNumber}>
             {getAttendancePercentage()}%
           </Text>
@@ -299,9 +279,7 @@ export default function Index() {
 
       {/* JADWAL DAN PRESENSI */}
       <View style={styles.courseCard}>
-        <Text style={styles.courseTitle}>
-          Pilih Jadwal Presensi
-        </Text>
+        <Text style={styles.courseTitle}>Pilih Jadwal Presensi</Text>
 
         <Text style={styles.selectLabel}>Pilih Hari</Text>
 
@@ -311,16 +289,14 @@ export default function Index() {
               key={day}
               style={[
                 styles.dayButton,
-                selectedDay === day &&
-                  styles.selectedDayButton,
+                selectedDay === day && styles.selectedDayButton,
               ]}
               onPress={() => handleDaySelect(day)}
             >
               <Text
                 style={[
                   styles.dayButtonText,
-                  selectedDay === day &&
-                    styles.selectedDayButtonText,
+                  selectedDay === day && styles.selectedDayButtonText,
                 ]}
               >
                 {day}
@@ -329,30 +305,24 @@ export default function Index() {
           ))}
         </View>
 
-        <Text style={styles.selectLabel}>
-          Mata Kuliah Hari {selectedDay}
-        </Text>
+        <Text style={styles.selectLabel}>Mata Kuliah Hari {selectedDay}</Text>
 
         {coursesByDay.length === 0 ? (
-          <Text style={styles.nim}>
-            Tidak ada jadwal kuliah pada hari ini.
-          </Text>
+          <Text style={styles.nim}>Tidak ada jadwal kuliah pada hari ini.</Text>
         ) : (
           coursesByDay.map((course) => (
             <Pressable
               key={course.id}
               style={[
                 styles.courseOption,
-                selectedCourse === course.name &&
-                  styles.selectedCourse,
+                selectedCourse === course.name && styles.selectedCourse,
               ]}
               onPress={() => handleCourseSelect(course.name)}
             >
               <Text
                 style={[
                   styles.courseOptionText,
-                  selectedCourse === course.name &&
-                    styles.selectedCourseText,
+                  selectedCourse === course.name && styles.selectedCourseText,
                 ]}
               >
                 {course.name}
@@ -363,16 +333,12 @@ export default function Index() {
 
         {selectedCourse !== "" && (
           <View style={styles.presenceBox}>
-            <Text style={styles.selectedSubject}>
-              {selectedCourse}
-            </Text>
+            <Text style={styles.selectedSubject}>{selectedCourse}</Text>
 
             <Text style={styles.nim}>Pertemuan 1</Text>
 
             <View style={styles.presenceStatusRow}>
-              <Text style={styles.statusLabel}>
-                Status Presensi
-              </Text>
+              <Text style={styles.statusLabel}>Status Presensi</Text>
 
               <Text
                 style={[
@@ -389,16 +355,13 @@ export default function Index() {
             <Pressable
               style={[
                 styles.attendanceButton,
-                isPresent &&
-                  styles.disabledAttendanceButton,
+                isPresent && styles.disabledAttendanceButton,
               ]}
               onPress={handleAttendance}
               disabled={isPresent}
             >
               <Text style={styles.attendanceButtonText}>
-                {isPresent
-                  ? "✓ SUDAH PRESENSI"
-                  : "PRESENSI SEKARANG"}
+                {isPresent ? "✓ SUDAH PRESENSI" : "PRESENSI SEKARANG"}
               </Text>
             </Pressable>
           </View>
@@ -411,77 +374,44 @@ export default function Index() {
           style={styles.dropdownHeader}
           onPress={() => setShowStudents(!showStudents)}
         >
-          <Text style={styles.courseTitle}>
-            Daftar Mahasiswa UMM
-          </Text>
+          <Text style={styles.courseTitle}>Daftar Mahasiswa UMM</Text>
 
-          <Text style={styles.dropdownIcon}>
-            {showStudents ? "▲" : "▼"}
-          </Text>
+          <Text style={styles.dropdownIcon}>{showStudents ? "▲" : "▼"}</Text>
         </Pressable>
 
         {showStudents && (
           <View style={styles.tableContainer}>
             <View style={styles.tableHeader}>
-              <Text
-                style={[
-                  styles.tableHeaderText,
-                  styles.nameColumn,
-                ]}
-              >
+              <Text style={[styles.tableHeaderText, styles.nameColumn]}>
                 Nama Mahasiswa
               </Text>
 
-              <Text
-                style={[
-                  styles.tableHeaderText,
-                  styles.nimColumn,
-                ]}
-              >
+              <Text style={[styles.tableHeaderText, styles.nimColumn]}>
                 NIM
               </Text>
 
-              <Text
-                style={[
-                  styles.tableHeaderText,
-                  styles.statusColumn,
-                ]}
-              >
+              <Text style={[styles.tableHeaderText, styles.statusColumn]}>
                 Status
               </Text>
             </View>
 
             {students.map((student) => (
-              <View
-                key={student.nim}
-                style={styles.tableRow}
-              >
+              <View key={student.nim} style={styles.tableRow}>
                 <Text
-                  style={[
-                    styles.tableName,
-                    styles.nameColumn,
-                  ]}
+                  style={[styles.tableName, styles.nameColumn]}
                   numberOfLines={2}
                 >
                   {student.name}
                 </Text>
 
                 <Text
-                  style={[
-                    styles.tableNim,
-                    styles.nimColumn,
-                  ]}
+                  style={[styles.tableNim, styles.nimColumn]}
                   numberOfLines={2}
                 >
                   {student.nim}
                 </Text>
 
-                <View
-                  style={[
-                    styles.statusColumn,
-                    styles.statusCell,
-                  ]}
-                >
+                <View style={[styles.statusColumn, styles.statusCell]}>
                   <Text
                     style={[
                       styles.statusBadge,
@@ -503,70 +433,45 @@ export default function Index() {
       <View style={styles.courseCard}>
         <Pressable
           style={styles.dropdownHeader}
-          onPress={() =>
-            setShowApiStudents(!showApiStudents)
-          }
+          onPress={() => setShowApiStudents(!showApiStudents)}
         >
           <Text style={styles.courseTitle}>
             Data Mahasiswa dari External API
           </Text>
 
-          <Text style={styles.dropdownIcon}>
-            {showApiStudents ? "▲" : "▼"}
-          </Text>
+          <Text style={styles.dropdownIcon}>{showApiStudents ? "▲" : "▼"}</Text>
         </Pressable>
 
         {showApiStudents && (
           <View style={styles.tableContainer}>
             <View style={styles.apiTableHeader}>
-              <Text
-                style={[
-                  styles.tableHeaderText,
-                  styles.apiNameColumn,
-                ]}
-              >
+              <Text style={[styles.tableHeaderText, styles.apiNameColumn]}>
                 Nama
               </Text>
 
-              <Text
-                style={[
-                  styles.tableHeaderText,
-                  styles.apiEmailColumn,
-                ]}
-              >
+              <Text style={[styles.tableHeaderText, styles.apiEmailColumn]}>
                 Email
               </Text>
             </View>
 
             {loading ? (
-              <Text style={styles.nim}>
-                Memuat data...
-              </Text>
+              <Text style={styles.nim}>Memuat data...</Text>
             ) : apiStudents.length === 0 ? (
               <Text style={styles.nim}>
                 Data gagal dimuat. Periksa koneksi internet.
               </Text>
             ) : (
               apiStudents.map((student) => (
-                <View
-                  key={student.id}
-                  style={styles.apiTableRow}
-                >
+                <View key={student.id} style={styles.apiTableRow}>
                   <Text
-                    style={[
-                      styles.apiName,
-                      styles.apiNameColumn,
-                    ]}
+                    style={[styles.apiName, styles.apiNameColumn]}
                     numberOfLines={2}
                   >
                     {student.name}
                   </Text>
 
                   <Text
-                    style={[
-                      styles.apiEmail,
-                      styles.apiEmailColumn,
-                    ]}
+                    style={[styles.apiEmail, styles.apiEmailColumn]}
                     numberOfLines={2}
                   >
                     {student.email}
@@ -580,23 +485,14 @@ export default function Index() {
 
       {/* RIWAYAT PRESENSI */}
       <View style={styles.courseCard}>
-        <Text style={styles.courseTitle}>
-          Riwayat Presensi
-        </Text>
+        <Text style={styles.courseTitle}>Riwayat Presensi</Text>
 
         {attendanceData.map((attendance) => (
-          <View
-            key={attendance.id}
-            style={styles.historyRow}
-          >
+          <View key={attendance.id} style={styles.historyRow}>
             <View style={styles.historyInfo}>
-              <Text style={styles.historySubject}>
-                {attendance.subject}
-              </Text>
+              <Text style={styles.historySubject}>{attendance.subject}</Text>
 
-              <Text style={styles.nim}>
-                {attendance.meeting}
-              </Text>
+              <Text style={styles.nim}>{attendance.meeting}</Text>
             </View>
 
             <Text
@@ -615,44 +511,27 @@ export default function Index() {
 
       {/* NAVIGASI APLIKASI */}
       <View style={styles.courseCard}>
-        <Text style={styles.courseTitle}>
-          Navigasi Aplikasi
-        </Text>
+        <Text style={styles.courseTitle}>Navigasi Aplikasi</Text>
 
         {/* PUSH: Membuka halaman riwayat */}
-        <Pressable
-          style={styles.attendanceButton}
-          onPress={handleOpenHistory}
-        >
-          <Text style={styles.attendanceButtonText}>
-            LIHAT HALAMAN RIWAYAT
-          </Text>
+        <Pressable style={styles.attendanceButton} onPress={handleOpenHistory}>
+          <Text style={styles.attendanceButtonText}>LIHAT HALAMAN RIWAYAT</Text>
         </Pressable>
 
         {/* PUSH: Membuka profil sambil mengirim data mahasiswa */}
         <Pressable
-          style={[
-            styles.attendanceButton,
-            styles.profileNavigationButton,
-          ]}
+          style={[styles.attendanceButton, styles.profileNavigationButton]}
           onPress={handleOpenProfile}
         >
-          <Text style={styles.attendanceButtonText}>
-            BUKA HALAMAN PROFIL
-          </Text>
+          <Text style={styles.attendanceButtonText}>BUKA HALAMAN PROFIL</Text>
         </Pressable>
 
         {/* REPLACE: Kembali ke login */}
         <Pressable
-          style={[
-            styles.attendanceButton,
-            { backgroundColor: "#B71C1C" },
-          ]}
+          style={[styles.attendanceButton, { backgroundColor: "#B71C1C" }]}
           onPress={handleLogout}
         >
-          <Text style={styles.attendanceButtonText}>
-            LOGOUT
-          </Text>
+          <Text style={styles.attendanceButtonText}>LOGOUT</Text>
         </Pressable>
       </View>
     </ScrollView>
