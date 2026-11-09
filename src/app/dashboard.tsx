@@ -1,4 +1,3 @@
-
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
@@ -140,6 +139,7 @@ export default function Index() {
   const [apiStudents, setApiStudents] = useState<ApiStudent[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // PRE-BUILT ASYNC FUNCTION
   // Mengambil data mahasiswa dari External API
   useEffect(() => {
     async function loadStudents() {
@@ -171,12 +171,37 @@ export default function Index() {
     setIsPresent(false);
   }
 
-  function handleAttendance() {
-    if (selectedCourse !== "") {
+  // CUSTOM ASYNC FUNCTION
+  // Simulasi proses presensi secara asynchronous
+  function processAttendance(
+    courseName: string
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (courseName.trim() === "") {
+          reject(new Error("Mata kuliah belum dipilih!"));
+        } else {
+          resolve(
+            `Presensi ${courseName} berhasil dilakukan!`
+          );
+        }
+      }, 1000);
+    });
+  }
+
+  // CUSTOM ASYNC FUNCTION dengan async/await
+  async function handleAttendance() {
+    try {
+      const result = await processAttendance(selectedCourse);
+
       setIsPresent(true);
+      Alert.alert("Presensi Berhasil", result);
+    } catch (error) {
       Alert.alert(
-        "Presensi Berhasil",
-        "Presensi berhasil dilakukan."
+        "Presensi Gagal",
+        error instanceof Error
+          ? error.message
+          : "Terjadi kesalahan."
       );
     }
   }

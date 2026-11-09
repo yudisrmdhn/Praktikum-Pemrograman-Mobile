@@ -38,7 +38,7 @@ export default function Login() {
       };
     } else if (
       nim.trim() === "202410370110323" &&
-      password === "24112005"
+      password === "20102005"
     ) {
       mahasiswa = {
         nama: "Gagah Yudhistira Ramadhan",
