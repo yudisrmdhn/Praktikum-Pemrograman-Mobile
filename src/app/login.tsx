@@ -47,7 +47,7 @@ export default function Login() {
       };
     } else if (
       nim.trim() === "202410370110292" &&
-      password === "24112005"
+      password === "08082005"
     ) {
       mahasiswa = {
         nama: "Putri Nurnikmatus Suharnani",
