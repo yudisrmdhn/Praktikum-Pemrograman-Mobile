@@ -1,4 +1,4 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   Alert,
@@ -11,6 +11,8 @@ import {
   getStudents,
   type Student as ApiStudent,
 } from "../services/api";
+import { signOut } from "../services/authService";
+import { supabase } from "../services/supabase";
 import { styles } from "./styles";
 
 type AttendanceStatus = "Hadir" | "Izin" | "Alpha";
@@ -140,12 +142,10 @@ function processAttendance(courseName: string): Promise<string> {
 export default function Index() {
   const router = useRouter();
 
-  // Mengambil data mahasiswa dari halaman Login
-  const { nama, nim, prodi } = useLocalSearchParams<{
-    nama: string;
-    nim: string;
-    prodi: string;
-  }>();
+  // Data identitas mahasiswa dari akun Supabase yang sedang login
+  const [nama, setNama] = useState("");
+  const [nim, setNim] = useState("");
+  const [prodi, setProdi] = useState("");
 
   const [selectedDay, setSelectedDay] = useState("Senin");
   const [selectedCourse, setSelectedCourse] = useState("");
@@ -156,6 +156,29 @@ export default function Index() {
 
   const [apiStudents, setApiStudents] = useState<ApiStudent[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Mengambil identitas mahasiswa dari metadata akun Supabase
+  useEffect(() => {
+    async function loadProfile() {
+      try {
+        const { data, error } = await supabase.auth.getUser();
+
+        if (error) {
+          throw error;
+        }
+
+        const metadata = data.user?.user_metadata;
+
+        setNama(metadata?.nama || "Nama Mahasiswa");
+        setNim(metadata?.nim || "-");
+        setProdi(metadata?.prodi || "-");
+      } catch (error) {
+        console.log("Gagal mengambil profil:", error);
+      }
+    }
+
+    loadProfile();
+  }, []);
 
   // TASK 2: CUSTOM ASYNC FUNCTION DAN PRE-BUILT ASYNC FUNCTION
 
@@ -190,7 +213,7 @@ export default function Index() {
   }
 
   // TASK 3: THEN DAN CATCH MENANGANI HASIL PROMISE
-  
+
   function handleAttendance() {
     processAttendance(selectedCourse)
       .then((result) => {
@@ -219,9 +242,19 @@ export default function Index() {
     } as any);
   }
 
-  // Keluar dari akun dan kembali ke halaman login
-  function handleLogout() {
-    router.replace("/login" as any);
+  // Keluar dari akun menggunakan Supabase
+  async function handleLogout() {
+    try {
+      await signOut();
+      router.replace("/login" as any);
+    } catch (error) {
+      Alert.alert(
+        "Logout Gagal",
+        error instanceof Error
+          ? error.message
+          : "Terjadi kesalahan."
+      );
+    }
   }
 
   return (
@@ -638,7 +671,7 @@ export default function Index() {
           </Text>
         </Pressable>
 
-        {/* REPLACE: Kembali ke login */}
+        {/* REPLACE: Logout dari Supabase dan kembali ke login */}
         <Pressable
           style={[
             styles.attendanceButton,
