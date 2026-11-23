@@ -1,32 +1,41 @@
-import { Stack } from "expo-router";
+import { Stack } from 'expo-router';
+import { AuthProvider } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
+import { ActivityIndicator, View } from 'react-native';
+
+function RootNavigator() {
+  const { session, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="index" />
+
+      <Stack.Protected guard={!session}>
+        <Stack.Screen name="login" />
+        <Stack.Screen name="signup" />
+      </Stack.Protected>
+
+      <Stack.Protected guard={!!session}>
+        <Stack.Screen name="dashboard" />
+        <Stack.Screen name="profil" />
+        <Stack.Screen name="riwayat" />
+      </Stack.Protected>
+    </Stack>
+  );
+}
 
 export default function RootLayout() {
   return (
-    <Stack initialRouteName="index">
-      <Stack.Screen
-        name="index"
-        options={{ headerShown: false }}
-      />
-
-      <Stack.Screen
-        name="login"
-        options={{ headerShown: false }}
-      />
-
-      <Stack.Screen
-        name="dashboard"
-        options={{ headerShown: false }}
-      />
-
-      <Stack.Screen
-        name="profil"
-        options={{ headerShown: false }}
-      />
-
-      <Stack.Screen
-        name="riwayat"
-        options={{ headerShown: false }}
-      />
-    </Stack>
+    <AuthProvider>
+      <RootNavigator />
+    </AuthProvider>
   );
 }
